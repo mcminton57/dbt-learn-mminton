@@ -1,50 +1,50 @@
-with customers as (
+WITH CUSTOMERS AS (
 
-    select * from {{ ref('stg_customers') }}
-
-),
-
-orders as (
-
-    select * from {{ ref('stg_orders') }}
+    SELECT * FROM {{ ref('stg_customers') }}
 
 ),
 
-payments as (
+ORDERS AS (
 
-    select * from {{ ref('stg_payments') }}
-
-),
-
-customer_orders as (
-
-    select
-        ord.customer_id
-        ,min(ord.order_date) as first_order_date
-        ,max(ord.order_date) as most_recent_order_date
-        ,count(ord.order_id) as number_of_orders
-        ,sum(pmt.amount) as payment_amount
-    from orders ord
-    left join payments pmt
-        on ord.order_id = pmt.order_id
-        and pmt.status = 'success'
-    group by 1
+    SELECT * FROM {{ ref('stg_orders') }}
 
 ),
 
-final as (
+PAYMENTS AS (
 
-    select
-        customers.customer_id,
-        customers.first_name,
-        customers.last_name,
-        customer_orders.first_order_date,
-        customer_orders.most_recent_order_date,
-        coalesce(customer_orders.number_of_orders, 0) as number_of_orders,
-        coalesce(customer_orders.payment_amount,0) as lifetime_value
-    from customers
-    left join customer_orders using (customer_id)
+    SELECT * FROM {{ ref('stg_payments') }}
+
+),
+
+CUSTOMER_ORDERS AS (
+
+    SELECT
+        ORD.CUSTOMER_ID
+        ,MIN(ORD.ORDER_DATE) AS FIRST_ORDER_DATE
+        ,MAX(ORD.ORDER_DATE) AS MOST_RECENT_ORDER_DATE
+        ,COUNT(ORD.ORDER_ID) AS NUMBER_OF_ORDERS
+        ,SUM(PMT.AMOUNT) AS PAYMENT_AMOUNT
+    FROM ORDERS ORD
+    LEFT JOIN PAYMENTS PMT
+        ON ORD.ORDER_ID = PMT.ORDER_ID
+        AND PMT.STATUS = 'success'
+    GROUP BY ORD.CUSTOMER_ID
+
+),
+
+FINAL AS (
+
+    SELECT
+        CUSTOMERS.CUSTOMER_ID,
+        CUSTOMERS.FIRST_NAME,
+        CUSTOMERS.LAST_NAME,
+        CUSTOMER_ORDERS.FIRST_ORDER_DATE,
+        CUSTOMER_ORDERS.MOST_RECENT_ORDER_DATE,
+        COALESCE(CUSTOMER_ORDERS.NUMBER_OF_ORDERS, 0) AS NUMBER_OF_ORDERS,
+        COALESCE(CUSTOMER_ORDERS.PAYMENT_AMOUNT,0) AS LIFETIME_VALUE
+    FROM CUSTOMERS
+    LEFT JOIN CUSTOMER_ORDERS USING (CUSTOMER_ID)
 
 )
 
-select * from final
+SELECT * FROM FINAL
