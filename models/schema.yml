@@ -1,5 +1,32 @@
 version: 2
 
+sources:
+  - name: jaffle_shop
+    database: raw
+    tables:
+      - name: customers
+        description: Customer data source
+        columns: 
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: orders
+        description: Order data source
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+  - name: stripe
+    database: raw
+    tables:
+      - name: payment
+        description: Payment data source
+        loaded_at_field: _batched_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+
 models:
   - name: customers
     description: One record per customer
@@ -16,10 +43,27 @@ models:
     description: One record per order
     columns:
       - name: order_id
-        description: Primary key
+        description: Primary key, uniquely identifies an Order
         tests:
           - unique
           - not_null
+      - name: customer_id
+        description: Identifies a Customer
+        tests:
+          - relationships:
+              to: ref('customers')
+              field: customer_id
+      - name: status
+        description: "{{ doc('order_status') }}"
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: total_payment_amount
+        description: Total payments, includes both successful and failed payments
+      - name: total_success_amount
+        description: Successful payments
+      - name: total_fail_amount
+        description: Failed Payments
 
   - name: stg_customers
     description: This model cleans up customer data
