@@ -53,6 +53,11 @@ models:
           - relationships:
               to: ref('customers')
               field: customer_id
+      - name: status
+        description: "{{ doc('order_status') }}"
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
       - name: total_payment_amount
         description: Total payments, includes both successful and failed payments
       - name: total_success_amount
