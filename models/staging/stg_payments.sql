@@ -5,4 +5,4 @@ SELECT
     ,STATUS
     ,TO_NUMBER(AMOUNT)/100 AS AMOUNT
     ,CREATED
-FROM RAW.STRIPE.PAYMENT
+FROM {{ source('stripe', 'payment') }}
