@@ -38,4 +38,14 @@ FINAL AS (
         ON CUSTOMERS.CUSTOMER_ID = CUSTOMER_ORDERS.CUSTOMER_ID
 )
 
-SELECT * FROM FINAL
+select 
+    *
+    ,{{ dbt_utils.surrogate_key([
+        'FIRST_NAME'
+        , 'LAST_NAME'
+        , 'FIRST_ORDER_DATE'
+        , 'MOST_RECENT_ORDER_DATE'
+        , 'MOST_RECENT_ORDER_DATE'
+        , 'NUMBER_OF_ORDERS'
+        , 'LIFETIME_VALUE']) }} AS VALUE_FIELD_HASH
+from final
