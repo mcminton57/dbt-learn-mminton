@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_ticket_tailor__orders
+    description: This model cleans up orders data
+    columns:
+      - name: order_id
+  - name: stg_ticket_tailor__events
+    description: This model cleans up events data
+    columns:
+      - name: event_id
+  - name: stg_ticket_tailor__issued_tickets
+    description: This model cleans up tickets data
+    columns:
+      - name: issued_ticket_id

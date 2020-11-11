@@ -1,0 +1,33 @@
+version: 2
+
+sources:
+  - name: ticket_tailor
+    database: raw
+    tables:
+      - name: orders
+        description: Ticket Tailor Orders data source
+        columns: 
+          - name: id
+            tests:
+              - unique
+              - not_null
+  - name: ticket_tailor
+    database: raw
+    tables:
+      - name: events
+        description: Ticket Tailor Events data source
+        columns: 
+          - name: id
+            tests:
+              - unique
+              - not_null
+  - name: ticket_tailor
+    database: raw
+    tables:
+      - name: issued_tickets
+        description: Ticket Tailor Tickets data source
+        columns: 
+          - name: id
+            tests:
+              - unique
+              - not_null
