@@ -1,13 +1,13 @@
 WITH CUSTOMERS AS (
-    SELECT * FROM {{ ref('stg_customers') }}
+    SELECT * FROM {{ ref('stg_jaffle_shop__customers') }}
 ),
 
 ORDERS AS (
-    SELECT * FROM {{ ref('stg_orders') }}
+    SELECT * FROM {{ ref('stg_jaffle_shop__orders') }}
 ),
 
 PAYMENTS AS (
-    SELECT * FROM {{ ref('stg_payments') }}
+    SELECT * FROM {{ ref('stg_stripe__payments') }}
 ),
 
 CUSTOMER_ORDERS AS (

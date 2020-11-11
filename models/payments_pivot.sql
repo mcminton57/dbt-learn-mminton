@@ -5,13 +5,13 @@
 -- Bonus: Is there a better way?
 
 {%- set methods = dbt_utils.get_column_values(
-    table=ref('stg_payments'),
+    table=ref('stg_stripe__payments'),
     column='paymentmethod'
 ) %}
 
 with payments as (
 
-    select * from {{ ref('stg_payments') }}
+    select * from {{ ref('stg_stripe__payments') }}
 
 ),
 

@@ -1,9 +1,9 @@
 WITH ORDERS AS (
-    SELECT * FROM {{ ref('stg_orders') }}
+    SELECT * FROM {{ ref('stg_jaffle_shop__orders') }}
 ),
 
 PAYMENTS AS (
-    SELECT * FROM {{ ref('stg_payments') }}
+    SELECT * FROM {{ ref('stg_stripe__payments') }}
 ),
 
 FINAL AS (
